@@ -1,0 +1,76 @@
+{
+  "clientes": [
+    {
+      "cliente_id": "C1231",
+      "nombre": "Juan Pérez",
+      "correo": "juan@gmail.com",
+      "telefono": "5512345678",
+      "direccion": {
+        "ciudad": "CDMX",
+        "pais": "México"
+      },
+      "fecha_registro": "01 / 15 / 2026"
+    },
+    {
+      "cliente_id": "C1262",
+      "nombre": "Ana López",
+      "correo": "ana@gmail.com",
+      "telefono": "5598765432",
+      "direccion": {
+        "ciudad": "Guadalajara",
+        "pais": "México"
+      },
+      "fecha_registro": "02 / 20 / 2026"
+    }
+  ],
+
+  "productos": [
+    {
+      "producto_id": "P8746",
+      "nombre": "Tenis deportivos",
+      "categoria": "Calzado",
+      "precio": 1200,
+      "stock": 50
+    },
+    {
+      "producto_id": "P9348",
+      "nombre": "Playera deportiva",
+      "categoria": "Ropa",
+      "precio": 500,
+      "stock": 100
+    }
+  ],
+
+  "ventas": [
+    {
+      "venta_id": "V9274",
+      "cliente_id": "C1231",
+      "fecha": "10 / 05 / 2026",
+      "productos": [
+        {
+          "producto_id": "P8746",
+          "cantidad": 2,
+          "precio_unitario": 1200
+        }
+      ],
+      "total": 2400,
+      "metodo_pago": "tarjeta",
+      "estatus": "completada"
+    },
+    {
+      "venta_id": "V9274",
+      "cliente_id": "C1262",
+      "fecha": "11 / 05 / 2026",
+      "productos": [
+        {
+          "producto_id": "P9348",
+          "cantidad": 1,
+          "precio_unitario": 500
+        }
+      ],
+      "total": 500,
+      "metodo_pago": "efectivo",
+      "estatus": "pendiente"
+    }
+  ]
+}
