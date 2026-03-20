@@ -201,8 +201,10 @@ Esta colección tendrá cada transacción realizada en la tienda. Es una de las 
 #### Colecciones en `json`
 
 ```json
+
 {
-    // Colección de clientes
+
+    // Colección clientes
 
   "clientes": [
     {
@@ -210,32 +212,36 @@ Esta colección tendrá cada transacción realizada en la tienda. Es una de las 
       "nombre": "Juan Pérez",
       "correo": "juan@gmail.com",
       "telefono": "5512345678",
-      "direccion": {
-        "ciudad": "CDMX",
-        "pais": "México"
+        "tipo_cliente": "nuevo",
+        "fidelidad": 0, 
+        "direccion": {
+            "ciudad": "CDMX",
+            "pais": "México"
       },
-      "fecha_registro": "01 / 15 / 2026"
+      "fecha_registro": "15 / 01 / 2026"
     },
     {
       "cliente_id": "C1262",
       "nombre": "Ana López",
       "correo": "ana@gmail.com",
       "telefono": "5598765432",
+      "tipo_cliente": "frecuente",
+      "fidelidad": 30 , // con un programa de fidelidad además de mantener constancia con el cliente podemos evaluar las frecuencias de compras, el impacto del programa en la empresa, etc.
       "direccion": {
         "ciudad": "Guadalajara",
         "pais": "México"
       },
-      "fecha_registro": "02 / 20 / 2026"
+      "fecha_registro": "20 / 02 / 2026"
     }
   ],
 
-    // Colección de productos
+    // Colección productos
 
   "productos": [
     {
       "producto_id": "P8746",
       "nombre": "Tenis deportivos",
-      "categoria": "Calzado",
+      "categoria": "Calzado", // con categorias podemos saber qué productos se venden más
       "precio": 1200,
       "stock": 50
     },
@@ -248,13 +254,34 @@ Esta colección tendrá cada transacción realizada en la tienda. Es una de las 
     }
   ],
 
-    // Colección de ventas
+    // Colección empleados
+
+  "empleados": [ //con empleados podemos determinar quién tiene mayores ventas
+    {
+      "empleado_id": "E8237",
+      "nombre": "Carlos Ramírez",
+      "puesto": "Vendedor",
+      "comosiones": 5, // usando comosiones damos incentivos a los trabajadores y se puede evaluar su desempeño
+      "sucursal": "Centro"
+    },
+    {
+      "empleado_id": "E2376",
+      "nombre": "Mariana Torres",
+      "puesto": "Vendedora",
+      "comisiones": 5, 
+      "sucursal": "Norte"
+    }
+  ],
+
+    // Colección ventas
 
   "ventas": [
     {
       "venta_id": "V9274",
       "cliente_id": "C1231",
+      "empleado_id": "E8237",
       "fecha": "10 / 05 / 2026",
+      "Hora": "14:31",
       "productos": [
         {
           "producto_id": "P8746",
@@ -264,12 +291,20 @@ Esta colección tendrá cada transacción realizada en la tienda. Es una de las 
       ],
       "total": 2400,
       "metodo_pago": "tarjeta",
-      "estatus": "completada"
+      "estatus": "completada",
+      "promocion_aplicada": true, // determina si las promociones tienen resultados positivos o negativos
+      "promocion": {
+        "codigo": "PROMO10", 
+        "descripcion": "10% de descuento en calzado",
+        "descuento%": 10
+      }
     },
     {
-      "venta_id": "V9274",
+      "venta_id": "V9275",
       "cliente_id": "C1262",
-      "fecha": "11 / 05 / 2026",
+      "empleado_id": "E2376",
+      "fecha": "12 / 05 / 2026",// nos ayuda a determinar en qué temporada del año hay más ventas, en base a esto también podemos tener en cuenta en qué momentos del año conviene más aplicar descuentos y promociones
+      "Hora": "16:24", // nos ayuda a determinar en qué hora del día hay más ventas
       "productos": [
         {
           "producto_id": "P9348",
@@ -279,11 +314,30 @@ Esta colección tendrá cada transacción realizada en la tienda. Es una de las 
       ],
       "total": 500,
       "metodo_pago": "efectivo",
-      "estatus": "pendiente"
+      "estatus": "pendiente",
+      "promocion_aplicada": false,
+      "promocion": null
     }
   ]
 }
 ```
+
+## Análisis de datos 
+
+Con datos más precisos en el archivo `json` presentado anteriormente podemos sacar más conclusiones y analizar puntos fundamentales de la empresa, por ejemplo: 
+
+- Qué empleado vende más
+
+- Determinar si las promociones tienen eficacia 
+
+- Buscar cuál es el momento del día donde hay más ventas
+
+- Identificar cuál es la temporada del año con más ventas
+
+- Qué categoría se vende más
+
+- Con programas de fidelidad 
+
 ---
 
 # Ejercicios Complementarios
