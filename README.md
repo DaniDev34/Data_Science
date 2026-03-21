@@ -354,6 +354,26 @@ Con datos más precisos en el archivo `json` presentado anteriormente podemos sa
 
 - **Lógica**: Pensamiento computacional básico
 
+### Ejercicio 1: Operaciones Algebraicas Básicas
+
+Resolver las siguientes operaciones: 
+
+```
+a) 3x + 5 = 17      → x = ?
+b) 2y - 8 = 22      → y = ?
+c) 4z + 3 = 3z + 10 → z = ?
+d) 5(x + 2) = 35    → x = ?
+```
+
+**Solución:**
+- a) x = 4
+- b) y = 15
+- c) z = 7
+- d) x = 5
+
+#### Ejercicios resueltos a mano: 
+
+
 ---
 
 ### Ejercicio 3: Escalas y Volúmenes (Big Data)
@@ -366,6 +386,83 @@ Expresar en notación científica:
 | 1,000,000,000,000 bytes     |      1 x 10¹²      |
 
 ---
+
+### Ejercicio 4: Diagrama de flujo
+
+#### 1: Determinar si un número es par o impar
+
+Pasos:
+
+- Inicio
+- Leer número
+- Calcular número 2
+- Si el residuo es 0 muestra “Es par”
+- Si no, muestra “Es impar”
+- Fin
+
+#### 2: Calcular el promedio de 3 números
+
+Pasos:
+
+- Inicio
+- Leer número 1
+- Leer número 2
+- Leer número 3
+- Sumar los tres números
+- Dividir el resultado entre 3
+- Mostrar el promedio
+- Fin
+
+#### 3: Encontrar el mayor de 4 números
+
+Pasos:
+
+- Inicio
+- Leer los cuatro números
+- Guardar el primero como el mayor
+- Comparar el segundo con el mayor
+- Si el segundo es mayor, actualizar el mayor
+- Comparar el tercero con el mayor
+- Si el tercero es mayor, actualizar el mayor
+- Comparar el cuarto con el mayor
+- Si el cuarto es mayor, actualizar el mayor
+- Mostrar el número mayor
+- Fin
+
+---
+
+### 5: Pseudocódigo 
+
+#### 1. Calcular el factorial de un número
+
+- Inicio
+  - Leer n
+  - factorial <- 1
+  - Para i <- 1 Hasta n Hacer
+    - factorial <- factorial * i
+  - Fin 
+  - Mostrar factorial
+- Fin
+
+#### 2. Buscar un elemento en la lista
+
+- Inicio
+  - Leer lista
+  - Leer elemento
+  - encontrado <- Falso
+
+  - Para cada valor en lista Hacer
+    - Si valor = elemento, Entonces
+      - encontrado <- Verdadero
+    - Fin
+  - Fin
+
+  - Si encontrado = Verdadero, Entonces
+    - Mostrar "Elemento encontrado"
+  - Si
+    - Mostrar "Elemento no encontrado"
+  - Fin
+- Fin
 
 ### Ejercicio 6: Operaciones Booleanas
 Evaluar las siguientes expresiones:
@@ -398,3 +495,50 @@ print((a or b) and c)   # True
 > Salida esperada
 ![boolean](ss/boolean.png)
 
+
+> Ejercicio 7 por terminar y mejorar
+
+### Ejercicio 7: Historia de la Ciencia de Datos
+
+#### 1. ¿Quién es considerada la primera científica de datos?
+
+Se considera a Ada Lovelace como una de las primeras figuras de la ciencia de datos y de la computación, aunque con más frecuencia se le reconoce como la primera programadora.
+
+##### 2. ¿Qué es el “Data Science Venn Diagram” de Drew Conway?
+
+Un diagrama propuesto por Drew Conway para explicar que la ciencia de datos surge de la combinación de tres áreas:
+
+- Conocimiento de matemáticas y estadística
+- Habilidades de programación o hacking
+- Experiencia sustantiva en un dominio o área de aplicación
+
+#### 3. Menciona 3 herramientas modernas de Big Data
+
+- Apache Hadoop: framework para procesamiento +
+distribuido de grandes volúmenes de datos.
+
+- Apache Spark: motor unificado para analítica y procesamiento de datos a gran escala.
+
+- Apache Kafka: plataforma distribuida de event streaming para canalización y análisis de datos en tiempo real.
+
+---
+
+> Ejercicio 8 mejorar información
+
+### Ejercicio 8: Aplicaciones de Big Data
+
+##### Salud
+
+En salud, el Big Data se usa para analizar expedientes clínicos, información genética, datos de dispositivos médicos o wearables. Esto ayuda a detectar los riesgos, monitorear a los pacientes y mejorar los tratamientos.
+
+#### Finanzas
+
+En las finanzas, el Big Data se utiliza para la detección de fraude, analizando grandes volúmenes de transacciones y los comportamientos para identificar actividades sospechosas en tiempo real.
+
+#### Redes sociales
+
+En las redes sociales, el Big Data se usa para recopilar y analizar las publicaciones, interacciones y tendencias, con el fin de obtener `insights`, medir campañas o apoyar decisiones de negocio.
+
+#### Deportes
+
+En los deportes, el Big Data permite analizar las estadísticas, el rendimiento y los datos en tiempo real para mejorar la experiencia de los fanaticos y generar contenido personalizado. Un ejemplo puede ser Wimbledon con IBM, donde se usan datos, la nube híbrida y uso de AI para enriquecer la experiencia digital del torneo.
