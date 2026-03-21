@@ -373,6 +373,11 @@ d) 5(x + 2) = 35    → x = ?
 
 #### Ejercicios resueltos a mano: 
 
+![ejercicios1](ss/ejercicios1.jpeg)
+
+---
+
+![ejercicios2](ss/ejercicios2.jpeg)
 
 ---
 
