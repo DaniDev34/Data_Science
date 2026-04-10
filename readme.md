@@ -28,6 +28,28 @@ Posteriormente, se procedió a cargar el dataset en un DataFrame, lo que nos per
 
 ---
 
+### 1. Dataset cargado
+
+Para cargar el `dataset`, descargamos directamente el archivo `zip` de **Kaggle**. Una vez extraido procedimos a cargarlo. 
+
+```python
+import pandas as pd 
+
+dataframe = pd.read_csv("train.csv")
+```
+Y verificamos sus datos con 
+
+```python
+
+dataframe.columns # para nombres de columnas
+dataframe.shape # filas y columnas
+dataframe.info() # tipos de datos y valores nulos
+
+```
+
+Detectamos 
+
+
 ## Exploración inicial del dataset
 
 Una vez que cargamos los datos, realizamos una revisión preliminar con el objetivo de comprender su estructura. Para ello, se analizaron los siguientes aspectos:
