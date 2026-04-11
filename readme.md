@@ -1,126 +1,134 @@
-# Avance del proyecto Ciencia de Datos
+# Avance del proyecto - Ciencia de Datos
 
-## Parte 1: Base de datos
+---
+
+# Parte 1: Base de datos
 
 ## Introducción
 
-En esta primera etapa del proyecto se realiza la carga y exploración inicial del conjunto de datos correspondiente al mercado inmobiliario, específicamente basado en información de propiedades de `Airbnb`. Este paso nos permite comprender la estructura, calidad y características generales de los datos antes de realizar cualquier tipo de análisis.
+En esta primera etapa del proyecto se realiza la carga y exploración inicial del conjunto de datos correspondiente al mercado inmobiliario, específicamente basado en información de propiedades de **Airbnb**. Esta fase es fundamental dentro del flujo de trabajo en ciencia de datos, ya que permite comprender la estructura, calidad y características generales de los datos antes de proceder con cualquier tipo de análisis.
 
-El dataset utilizado proviene de la plataforma `Kaggle`, el cual contiene información relevante sobre precios, ubicaciones, características físicas de las propiedades y otros atributos que pueden influir en el valor de una vivienda.
+El dataset utilizado proviene de la plataforma **Kaggle**, el cual contiene información relevante sobre precios, ubicaciones, características físicas de las propiedades y otros atributos que pueden influir en el valor de una vivienda.
 
 ---
 
 ## Carga de datos
 
-Para comenzar con nuestro análisis, se importaron las librerías necesarias para el procesamiento y visualización de datos en Python. Entre las principales herramientas utilizadas se encuentran:
+Para comenzar con el análisis, se importaron las librerías necesarias para el procesamiento y visualización de datos en Python. Entre las principales herramientas utilizadas se encuentran:
 
 - **Pandas:** para la manipulación y análisis de datos.
 - **NumPy:** para operaciones numéricas.
 - **Matplotlib y Seaborn:** para la visualización de datos.
 
-```bash
-pip install pandas numpy matplotlob
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set(style="whitegrid")# Configuración visual
+
+df = pd.read_csv("train.csv") # Cargar dataset 
+
+df.head()# Mostrar primeras filas
 ```
 
-Dichas herramientas fueron instaladas en nuestro entorno virtual desde la terminal de VS Code.
+Estas herramientas fueron instaladas dentro de un entorno virtual
 
-Posteriormente, se procedió a cargar el dataset en un DataFrame, lo que nos permite trabajar con los datos de forma estructurada.
+Posteriormente, procedimos a descargar el dataset desde **Kaggle** en formato `.zip`, el cual fue descomprimido para obtener el archivo principal en formato `.csv`.
+
+Una vez disponible el archivo, se cargó en un DataFrame de Pandas para poder trabajar con los datos de forma estructurada.
 
 ---
 
-### 1. Dataset cargado
-
-Para cargar el `dataset`, descargamos directamente el archivo `zip` de **Kaggle**. Una vez extraido procedimos a cargarlo. 
-
-```python
-import pandas as pd 
-
-dataframe = pd.read_csv("train.csv")
-```
-Y verificamos sus datos con 
-
-```python
-
-dataframe.columns # para nombres de columnas
-dataframe.shape # filas y columnas
-dataframe.info() # tipos de datos y valores nulos
-
-```
-
-Detectamos 
-
-
 ## Exploración inicial del dataset
 
-Una vez que cargamos los datos, realizamos una revisión preliminar con el objetivo de comprender su estructura. Para ello, se analizaron los siguientes aspectos:
+Después de cargar el dataset, se realizó una exploración preliminar con el objetivo de comprender su estructura y contenido. En esta etapa se analizaron los siguientes aspectos:
 
-- Número de registros y columnas del dataset.
-- Tipos de datos de cada variable.
+- Número total de registros y columnas.
+- Nombres de las variables.
+- Tipos de datos de cada columna.
 - Identificación de valores nulos o faltantes.
-- Visualización de las primeras filas del dataset.
 
-Con esta exploración inicial pudimos identificar posibles problemas en los datos, como inconsistencias, valores faltantes o tipos de datos incorrectos, los cuales deberán ser considerados en etapas posteriores del análisis.
+Esta exploración permite detectar posibles problemas en los datos, como inconsistencias, valores faltantes o tipos de datos incorrectos, los cuales deberán ser considerados en etapas posteriores del análisis.
 
 ---
 
 ## Estructura de los datos
 
-Nuestro dataset contiene múltiples variables relacionadas con las propiedades, entre las cuales se pueden encontrar:
+El dataset contiene múltiples variables relacionadas con las propiedades de Airbnb, las cuales pueden clasificarse en distintos tipos:
 
-- Variables numéricas (Ej. precio, número de habitaciones, etc.).
-- Variables categóricas (de propiedad, ubicación, etc.).
-- Variables descriptivas (información adicional de las propiedades).
+- **Variables numéricas:** como el precio, número de habitaciones, número de baños, entre otros.
+- **Variables categóricas:** como el tipo de propiedad o la ubicación.
+- **Variables descriptivas:** que contienen información adicional sobre las propiedades.
 
-Con diversidad de variables podemos hacer un más análisis completo, tanto descriptivo como relacional, lo cual es esencial para comprender factores que influyen en el precio de una vivienda.
-
----
-## Parte 2: Análisis Exploratorio de Datos (EDA)
-
-## Introducción
-
-En esta parte del proyecto llevaremos a cabo el análisis exploratorio de datos (EDA), el cual tiene como objetivo comprender en profundidad las características del dataset, identificar patrones, tendencias y posibles anomalías dentro de los datos relacionados con `Airbnb`.
+Esta diversidad de variables permite realizar un análisis más completo, tanto desde un enfoque descriptivo como relacional, facilitando la identificación de factores que influyen en el precio de una vivienda.
 
 ---
+
+## Importancia de esta etapa
+
+La correcta carga y comprensión inicial de los datos es un paso crítico en cualquier proyecto de ciencia de datos, ya que establece la base para todo el análisis posterior.
+
+En esta etapa se logra:
+
+- Verificar que los datos se cargaron correctamente.
+- Identificar problemas de calidad en los datos.
+- Comprender la estructura general del dataset.
+- Preparar la información para el análisis exploratorio.
+
+---
+
+# Parte 2: Análisis Exploratorio de Dato
+
+
+
+En esta etapa del proyecto se lleva a cabo el análisis exploratorio de datos (EDA), cuyo objetivo es comprender en profundidad el comportamiento del dataset, identificar patrones, tendencias y posibles anomalías dentro de los datos relacionados con Airbnb.
+
+El EDA permite transformar los datos en información útil mediante el uso de estadísticas descriptivas y visualizaciones, lo cual facilita la interpretación de los datos y la toma de decisiones.
+
+---
+
 
 ## Análisis descriptivo
 
-Se realizó un análisis estadístico de las variables numéricas del dataset con el fin de obtener métricas que permitan entender su comportamiento. Entre las principales medidas calculadas se encuentran:
+Se realizó un análisis estadístico de las variables numéricas del dataset con el fin de entender su comportamiento. Para ello, se calcularon las siguientes medidas:
 
-- **Media:** permite conocer el valor promedio de las variables.
-- **Mediana:** indica el valor central de los datos.
-- **Moda:** identifica los valores más frecuentes.
-- **Desviación estándar:** mide la dispersión de los datos respecto a la media.
+- **Media:** para conocer el valor promedio de las variables.
+- **Mediana:** para identificar el valor central de los datos.
+- **Moda:** para determinar los valores más frecuentes.
+- **Desviación estándar:** para medir la dispersión de los datos.
 
-Además, se evaluaron las variables que podrían tener mayor influencia en el precio de una vivienda, considerando tanto variables numéricas como categóricas.
+Este análisis permite obtener una visión general del comportamiento de variables clave como el precio, así como identificar posibles anomalías.
 
 ---
 
 ## Visualización de datos
 
-Para complementar el análisis descriptivo, se generaron diversas visualizaciones utilizando bibliotecas como `Matplotlib`, con el objetivo de representar gráficamente la información y facilitar su interpretación.
+Para complementar el análisis descriptivo, se generaron diversas visualizaciones utilizando bibliotecas como **Matplotlib** y **Seaborn**, con el objetivo de representar gráficamente los datos y facilitar su interpretación.
 
 ### Histogramas
 
-Se utilizaron histogramas para analizar la distribución de variables numéricas, especialmente el precio de las propiedades.
+Los histogramas se utilizaron para analizar la distribución de variables numéricas, especialmente el precio de las propiedades. Esto permite identificar la concentración de datos en ciertos rangos.
 
 ### Diagramas de caja (Boxplot)
 
-Los diagramas de caja se utilizaron para detectar la presencia de valores atípicos en variables como el precio. Estos valores pueden influir significativamente en el análisis y deben ser considerados cuidadosamente.
+Los diagramas de caja se emplearon para detectar valores atípicos (outliers), los cuales pueden afectar significativamente el análisis.
 
 ### Gráficas de dispersión (Scatter Plot)
 
-Se emplearon gráficas de dispersión para analizar la relación entre variables, como el número de habitaciones y el precio de las propiedades. Gracias a esto podemos identificar tendencias o correlaciones entre variables.
+Las gráficas de dispersión permitieron analizar la relación entre variables, como el número de habitaciones y el precio, ayudando a identificar posibles correlaciones.
 
 ### Mapa de calor de correlaciones
 
-Se generó un mapa de calor para visualizar las correlaciones entre variables numéricas. Esta herramienta es útil para identificar qué variables tienen mayor relación con el precio, lo que es fundamental para futuros modelos predictivos.
+Se utilizó un mapa de calor para visualizar la relación entre variables numéricas, facilitando la identificación de aquellas que tienen mayor impacto en el precio.
 
 ---
 
 ## Interpretación de resultados
 
-El análisis realizado nos permite comprender mejor el comportamiento del mercado inmobiliario representado en el dataset. La identificación de patrones y relaciones entre variables nos proporciona información valiosa que puede ser utilizada para la toma de decisiones.
+A partir del análisis exploratorio, es posible identificar patrones relevantes en el comportamiento de los datos. Por ejemplo, ciertas características de las propiedades pueden influir directamente en su precio, mientras que la presencia de valores atípicos puede indicar propiedades con características especiales o segmentación dentro del mercado.
 
-Por ejemplo, la relación entre el tamaño de una propiedad y su precio sugiere que características físicas influyen directamente en su valor. Asimismo, la presencia de valores atípicos indica la existencia de propiedades con precios significativamente diferentes al promedio, lo cual puede representar segmentos específicos del mercado.
+Este análisis proporciona una base sólida para comprender los datos y continuar con etapas más avanzadas, como la construcción de modelos predictivos.
 
 ---
