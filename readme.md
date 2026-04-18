@@ -1,655 +1,650 @@
-# Avance del proyecto - Ciencia de Datos
+# Actividad 3
 
----
-
-# Parte 1: Base de datos
+# 1.- Preparación de los datos
 
 ## Introducción
 
-En esta primera etapa del proyecto se realiza la carga y exploración inicial del conjunto de datos correspondiente al mercado inmobiliario, específicamente basado en información de propiedades de **Airbnb**. Esta fase es fundamental dentro del flujo de trabajo en ciencia de datos, ya que permite comprender la estructura, calidad y características generales de los datos antes de proceder con cualquier tipo de análisis.
+En esta etapa inicial de la actividad se lleva a cabo la recopilación y preparación del conjunto de datos relacionado con el rendimiento de equipos de béisbol, específicamente enfocado en variables como el número de bateos (*hits*) y el número de carreras (*runs*).
 
-El dataset utilizado proviene de la plataforma **Kaggle**, el cual contiene información relevante sobre precios, ubicaciones, características físicas de las propiedades y otros atributos que pueden influir en el valor de una vivienda.
+Esta fase representa uno de los pilares fundamentales dentro del proceso de ciencia de datos, ya que permite asegurar la calidad, consistencia y confiabilidad de la información antes de aplicar cualquier modelo predictivo. Trabajar con datos sin una preparación adecuada puede generar resultados imprecisos o interpretaciones erróneas.
+
+El dataset utilizado fue obtenido a partir de estadísticas deportivas disponibles en línea, las cuales contienen información relevante para analizar el desempeño ofensivo de los equipos. A partir de estos datos, se busca establecer una relación entre las variables para posteriormente construir un modelo de regresión lineal simple.
 
 ---
 
+## Limpieza de datos
+
+La limpieza de datos consiste en identificar y corregir problemas dentro del dataset que puedan afectar el análisis. Algunos de los problemas más comunes incluyen:
+
+- **Valores faltantes:** datos que no fueron registrados.
+- **Datos erróneos:** valores fuera de rango o inconsistentes.
+- **Duplicados:** registros repetidos que pueden sesgar el análisis.
+
+Para solucionar estos problemas, se pueden aplicar técnicas como:
+
+- Eliminación de registros incompletos.
+- Imputación de valores faltantes (por ejemplo, usando la media o mediana).
+- Eliminación de duplicados.
+
+Este proceso asegura que el dataset sea confiable y esté listo para su uso en modelos de aprendizaje automático.
+
+---
+
+## Estandarización de datos
+
+La estandarización consiste en transformar los datos a un formato uniforme, lo cual facilita su interpretación y procesamiento. Esto puede incluir:
+
+- Ajustar nombres de columnas.
+- Convertir tipos de datos (por ejemplo, de texto a numérico).
+- Normalizar valores para que estén en una misma escala.
+
+Aunque en modelos simples como la regresión lineal básica no siempre es obligatorio, la estandarización es una buena práctica que mejora la calidad del análisis y evita problemas en etapas más avanzadas.
+
+---
+
+## Relación con el modelo de regresión
+
+La correcta preparación de los datos es fundamental para la construcción de un modelo de regresión lineal simple, ya que este tipo de modelo depende directamente de la calidad de las variables analizadas.
+
+En este caso, se busca analizar la relación entre:
+
+- **Variable independiente (X):** número de bateos (*hits*)
+- **Variable dependiente (Y):** número de carreras (*runs*)
+
+Si los datos presentan errores o inconsistencias, el modelo generado no reflejará la realidad, lo que afectará su capacidad predictiva.
+
+---
+
+## Obtención de los datos
+
+Para el desarrollo de esta actividad, se utilizaron datos reales de estadísticas de jugadores de béisbol obtenidos de la página oficial de ESPN.
+
+Debido a que la plataforma no permite la descarga directa en formato estructurado, los datos fueron recopilados manualmente y organizados en una hoja de cálculo. Posteriormente, se seleccionaron las variables más relevantes para el análisis y se exportaron a un archivo en formato `.csv`.
+
+Las variables seleccionadas fueron:
+
+- **Hits (bateos)**
+- **RBI (carreras impulsadas)**
+
+Este proceso permitió contar con un dataset estructurado y listo para ser procesado en Python.
+
 ## Carga de datos
 
-Para comenzar con el análisis, se importaron las librerías necesarias para el procesamiento y visualización de datos en Python. Entre las principales herramientas utilizadas se encuentran:
-
-- **Pandas:** para la manipulación y análisis de datos.
-- **NumPy:** para operaciones numéricas.
-- **Matplotlib y Seaborn:** para la visualización de datos.
+Una vez preparado el archivo `.csv`, se procedió a cargar el dataset en el entorno de trabajo utilizando la librería **Pandas**, la cual permite manipular datos de forma eficiente.
 
 ```python
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 
-sns.set(style="whitegrid")# Configuración visual
+# Cargar dataset
+df = pd.read_csv("beisbol.csv")
 
-df = pd.read_csv("train.csv") # Cargar dataset 
-
-df.head()# Mostrar primeras filas
+# Mostrar primeras filas
+df.head()
 ```
-
-
-Estas herramientas fueron anteriormente instaladas dentro de un entorno virtual
-
-Posteriormente, procedimos a descargar el dataset desde **Kaggle** en formato `.zip`, el cual fue descomprimido para obtener el archivo principal en formato `.csv`.
-
-Una vez disponible el archivo, se cargó en un DataFrame de Pandas para poder trabajar con los datos de forma estructurada.
-
-
-![parte1_1](/ss/1_1.png)
-
-![parte1_2](/ss/1_2.png)
 
 ---
 
 ## Exploración inicial del dataset
 
-Después de cargar el dataset, se realizó una exploración preliminar con el objetivo de comprender su estructura y contenido. En esta etapa se analizaron los siguientes aspectos:
-
-- Número total de registros y columnas.
-- Nombres de las variables.
-- Tipos de datos de cada columna.
-- Identificación de valores nulos o faltantes.
+Después de cargar los datos, se realizó una exploración preliminar para comprender la estructura del dataset y detectar posibles problemas.
 
 ```python
+# Información general del dataset
+df.info()
 
-df.info() # Información general
-
-
-print("Filas:", df.shape[0]) # Para dimensiones
+# Dimensiones
+print("Filas:", df.shape[0])
 print("Columnas:", df.shape[1])
 
+# Nombres de columnas
+print(df.columns)
 
-print(df.columns) # Nombres de columnas
-
-
-print(df.isnull().sum()) # Para valores nulos
+# Valores nulos
+print(df.isnull().sum())
 ```
 
 
+---
+
+# Limpieza de datos
+
+Con base en la exploración inicial, se detectó la presencia de valores nulos en el dataset, por lo que se procedió a aplicar técnicas de limpieza de datos.
+
+En primer lugar, se eliminaron las filas con valores faltantes:
+
 ```python
-df = df.drop_duplicates()# Eliminar duplicados
-
-
-df = df.dropna() # Manejo de nulos
-
+df = df.dropna()
 ```
 
-![parte2](/ss/2.png)
-
-Gracias a esta exploración incial podemos detectar posibles problemas en los datos, tales como inconsistencias, valores faltantes o tipos de datos incorrectos, los cuales deberán ser considerados en etapas posteriores del análisis.
-
----
-
-## Estructura de los datos
-
-El dataset contiene múltiples variables relacionadas con las propiedades de Airbnb, las cuales pueden clasificarse en distintos tipos:
-
-- **Variables numéricas:** como el precio, número de habitaciones, número de baños, entre otros.
-- **Variables categóricas:** como el tipo de propiedad o la ubicación.
-- **Variables descriptivas:** que contienen información adicional sobre las propiedades.
-
-Esta diversidad de variables permite realizar un análisis más completo, tanto desde un enfoque descriptivo como relacional.
-
----
-
-## Importancia de esta etapa
-
-La correcta carga y comprensión inicial de los datos es un paso crítico en cualquier proyecto de ciencia de datos, ya que establece la base para todo el análisis posterior.
-
-En esta etapa se logra:
-
-- Verificar que los datos se cargaron correctamente.
-- Identificar problemas de calidad en los datos.
-- Comprender la estructura general del dataset.
-- Preparar la información para el análisis exploratorio.
-
----
-
-# Parte 2: Análisis Exploratorio de Datos
-
-
-
-En esta etapa del proyecto se lleva a cabo el análisis exploratorio de datos (EDA), cuyo objetivo es comprender en profundidad el comportamiento del dataset, identificar patrones, tendencias y posibles anomalías dentro de los datos relacionados con Airbnb.
-
-El EDA permite transformar los datos en información útil mediante el uso de estadísticas descriptivas y visualizaciones, lo cual facilita la interpretación de los datos y la toma de decisiones.
-
----
-
-
-## Análisis descriptivo
-
-Se realizó un análisis estadístico de las variables numéricas del dataset con el fin de entender su comportamiento. Para ello, se calcularon las siguientes medidas:
-
-- **Media:** para conocer el valor promedio de las variables.
-- **Mediana:** para identificar el valor central de los datos.
-- **Moda:** para determinar los valores más frecuentes.
-- **Desviación estándar:** para medir la dispersión de los datos.
+Luego, se eliminaron posibles registros duplicados:
 
 ```python
-# Estadísticas generales
-df.describe()
-
-# Media
-print("Media:", df['log_price'].mean())
-
-# Mediana
-print("Mediana:", df['log_price'].median())
-
-# Moda
-print("Moda:", df['log_price'].mode()[0])
-
-# Desviación estándar
-print("Desviación estándar:", df['log_price'].std())
-```
-
-![parte3](/ss/3.png)
-
-Este análisis permite tener una visión general del comportamiento de las variables clave como el precio.
-
----
-
-## Visualización de datos
-
-Para complementar el análisis descriptivo, se generaron diversas visualizaciones utilizando bibliotecas como **Matplotlib** y **Seaborn**, con el objetivo de representar gráficamente los datos y facilitar su interpretación.
-
-### Histogramas
-
-Los histogramas se utilizaron para analizar la distribución de variables numéricas, especialmente el precio de las propiedades. 
-
-```python
-plt.figure(figsize=(8,5))
-plt.hist(df['price'], bins=50)
-plt.title("Distribución de precios")
-plt.xlabel("Precio")
-plt.ylabel("Frecuencia")
-plt.show()
-```
-![parte4](/ss/4.png)
-
-### Diagramas de caja (Boxplot)
-
-Los diagramas de caja se emplearon para detectar valores atípicos (outliers), los cuales pueden afectar el análisis.
-
-```python
-plt.figure(figsize=(6,4))
-sns.boxplot(x=df['log_price'])
-plt.title("Boxplot de precios")
-plt.show()
-```
-![parte5](/ss/5.png)
-
-### Gráficas de dispersión (Scatter Plot)
-
-Las gráficas de dispersión permitieron analizar la relación entre variables, como el número de habitaciones y el precio, ayudando a identificar posibles correlaciones.
-
-```python
-plt.figure(figsize=(8,5))
-sns.scatterplot(x='bedrooms', y='price', data=df)
-plt.title("Relación entre habitaciones y precio")
-plt.show()
-```
-
-![parte6](/ss/6.png)
-
-### Mapa de calor de correlaciones
-
-Se utilizó un mapa de calor para visualizar la relación entre variables numéricas e identificar aquellas que tienen mayor impacto en el precio.
-
-```python
-plt.figure(figsize=(10,6))
-corr = df.corr(numeric_only=True)
-sns.heatmap(corr, annot=True, cmap="coolwarm")
-plt.title("Mapa de correlación")
-plt.show()
-```
-![parte7](/ss/7.png)
-
----
-
-## Interpretación de resultados
-
-A partir del análisis exploratorio, es posible identificar patrones relevantes en el comportamiento de los datos. Por ejemplo, ciertas características de las propiedades pueden influir directamente en su precio, mientras que la presencia de valores atípicos puede indicar propiedades con características especiales o segmentación dentro del mercado.
-
-Este análisis proporciona una base sólida para comprender los datos y continuar con etapas más avanzadas, como la construcción de modelos predictivos.
-
----
-
-# Ejercicios complementarios semana 3
-
-Estos ejercicios de la semana tres fueron hechos para reforzar los temas cubiertos a lo largo de las sesiones y las lecciones de **aula invertida**
-
-- **T6**: Python para ciencia de datos
-- **T7**: El proceso de ciencia de datos
-- **T8**: Análisis exploratorio de datos en Python
-
-## Prerrequisitos Recomendados
-- **Programación**: Python básico (variables, funciones, loops)
-- **Estadística**: Medidas de tendencia central, distribuciones, percentiles
-- **Librerías**: NumPy, Pandas, Matplotlib
-
----
-
-## Ejercicios con Python básico
-
-## Ejercicio 1: Variables y Tipos de Datos
-
-```python
-# Ejercicios:
-# 1. Crear variables de diferentes tipos: int, float, str, bool, list, dict
-# 2. Convertir tipos: str a int, float a int, int a float
-# 3. Usar f-strings para formatear: "El usuario tiene X años"
-```
-
-```python
-# Crear variables
-entero = 10
-flotante = 3.14
-cadena = "Hola"
-booleano = True
-lista = [1, 2, 3]
-diccionario = {"nombre": "Daniel", "edad": 18}
-
-# Conversión de tipos
-texto_num = "25"
-entero_convertido = int(texto_num)
-
-float_num = 5.9
-entero_desde_float = int(float_num)
-
-entero_num = 7
-float_convertido = float(entero_num)
-
-# f-strings
-edad = 18
-mensaje = f"El usuario tiene {edad} años"
-print(mensaje)
-```
-
----
-
-## Ejercicio 2: Control de flujo 
-
-```python
-#Número positivo, negativo o cero
-numero = -5
-
-if numero > 0:
-    print("Positivo")
-elif numero < 0:
-    print("Negativo")
-else:
-    print("Cero")
-
-# Menú con if-elif-else
-opcion = 2
-
-if opcion == 1:
-    print("Opción 1 seleccionada")
-elif opcion == 2:
-    print("Opción 2 seleccionada")
-else:
-    print("Opción inválida")
-
-# Loop for
-lista = [10, 20, 30]
-for elemento in lista:
-    print(elemento)
-
-# Factorial con while
-n = 5
-factorial = 1
-
-while n > 0:
-    factorial *= n
-    n -= 1
-
-print("Factorial:", factorial)
-
-```
-
----
-
-## Ejercicio 3: Funciones
-
-```python
-import math
-
-# Área de un círculo
-def area_circulo(radio):
-    return math.pi * radio**2
-
-# Celsius a Fahrenheit
-def celsius_a_fahrenheit(c):
-    return (c * 9/5) + 32
-
-# Promedio de lista
-def promedio(lista):
-    return sum(lista) / len(lista)
-
-# Máximo y mínimo
-def max_min(lista):
-    return max(lista), min(lista)
-
-# prints
-print(area_circulo(5))
-print(celsius_a_fahrenheit(25))
-print(promedio([1, 2, 3, 4]))
-print(max_min([5, 2, 9, 1]))
-```
-
----
-
-## Ejercicios con NumPy
-
-## Ejecicio 4: NumPy Arrays
-
-```python
-import numpy as np
-
-arr1 = np.array([1, 2, 3, 4, 5])
-arr2 = np.array([5, 4, 3, 2, 1])
-
-suma = arr1 + arr2
-
-# Multiplicación por escalar
-escalar = arr1 * 2
-
-# Estadísticas
-media = np.mean(arr1)
-mediana = np.median(arr1)
-std = np.std(arr1)
-
-# Valores únicos
-unicos = np.unique(arr1)
-
-# Reshape
-reshape = arr1.reshape(5,1)
-
-print(suma, escalar, media, mediana, std, unicos, reshape)
-```
-
----
-
-## Ejercicio 5: Álgebra con NumPy
-
-```python
-v1 = np.array([1, 2, 3])
-v2 = np.array([4, 5, 6])
-
-# punto
-producto_punto = np.dot(v1, v2)
-
-# cruz
-producto_cruz = np.cross(v1, v2)
-
-# Magnitud
-magnitud_v1 = np.linalg.norm(v1)
-magnitud_v2 = np.linalg.norm(v2)
-
-# Normalización
-norm_v1 = v1 / magnitud_v1
-norm_v2 = v2 / magnitud_v2
-
-print(producto_punto, producto_cruz, magnitud_v1, magnitud_v2)
-```
-
----
-
-## Ejercicios con Pandas
-
-## Ejercicio 6: Pandas básico
-
-```python
-
-import pandas as pd
-
-data = {
-    'nombre': ['Ana', 'Luis', 'María', 'Carlos', 'Sofia'],
-    'edad': [20, 22, 19, 21, 23],
-    'carrera': ['Ing', 'Ing', 'Lic', 'Ing', 'Lic'],
-    'promedio': [8.5, 9.0, 7.8, 8.2, 9.5]
-}
-
-df = pd.DataFrame(data)
-
-# Seleccionar columna
-print(df['nombre'])
-
-# Filtrar
-print(df[df['promedio'] > 8.5])
-
-# Ordenar
-print(df.sort_values(by='edad'))
-
-# Nueva columna
-df['aprobado'] = df['promedio'] >= 7
-
-# Group by
-print(df.groupby('carrera')['promedio'].mean())
-
-```
-
----
-
-## Ejercicio 7: Manipulación
-
-```python
-# Valores faltantes
-df.loc[0, 'promedio'] = None
-df['promedio'] = df['promedio'].fillna(df['promedio'].mean())
-
-# Eliminar duplicados
 df = df.drop_duplicates()
-
-# Apply
-df['doble_edad'] = df['edad'].apply(lambda x: x * 2)
-
-# loc e iloc
-print(df.loc[0])
-print(df.iloc[0:2])
-
-# Concatenar
-df2 = df.copy()
-df_concat = pd.concat([df, df2])
-
 ```
+
 
 ---
 
-## Ejercicios de visualización
+## Selección de variables
 
-## Ejercicio 8: Matplotlib
+Una vez finalizada la limpieza del dataset, se procedió a seleccionar las variables que se utilizarán en el modelo de regresión lineal simple.
+
+En este caso, se definieron:
+
+- **Variable independiente (X):** número de hits (`Hits`)
+- **Variable dependiente (y):** número de carreras impulsadas (`RBI`)
+
+```python
+X = df[['Hits']]
+y = df['RBI']
+```
+
+La variable independiente es el número de bateos realizados por cada jugador, mientras que la variable dependiente corresponde a las carreras impulsadas.
+
+---
+
+# 2.- Análisis exploratorio de datos
+
+## Análisis exploratorio
+
+Una vez finalizada la preparación del dataset, se realizó un análisis exploratorio de datos (EDA) con el objetivo de comprender el comportamiento de las variables y detectar posibles patrones o relaciones entre ellas.
+
+El análisis se enfocó principalmente en las variables:
+
+- **Hits** (número de bateos)
+- **RBI** (carreras impulsadas)
+
+---
+
+## Estadísticas descriptivas
+
+Para obtener una visión general del comportamiento de los datos, se calcularon estadísticas descriptivas de las variables numéricas del dataset.
+
+```python
+df.describe()
+```
+
+Este análisis permite observar:
+
+- **Media:** el valor promedio de cada variable
+- **Desviación estándar:** la dispersión de los datos
+- **Valores mínimos y máximos**: el rango de los datos
+- **Cuartiles**: la distribución de los valores
+
+A partir de estos resultados, se puede identificar cómo se distribuyen los datos y si existen valores atípicos o extremos.
+
+## Análisis de correlación
+
+Con el objetivo de determinar la relación entre las variables Hits y RBI, se calculó el coeficiente de correlación de Pearson.
+
+```python
+correlacion = df['Hits'].corr(df['RBI'])
+print("Correlación de Pearson:", correlacion)
+```
+
+El coeficiente de correlación de Pearson mide la fuerza y dirección de la relación lineal entre dos variables, tomando valores entre **-1 y 1:**
+
+- Valores cercanos a 1 indican una correlación positiva fuerte
+- Valores cercanos a 0 indican una relación débil o inexistente
+- Valores cercanos a -1 indican una correlación negativa fuerte
+
+En nuestro caso, el valor obtenido fue aproximadamente 0.16, lo que indica que es una correlación positiva débil entre el número de hits y las carreras impulsadas.
+
+Esto nos sugiere que, aunque existe cierta relación entre ambas variables, el número de hits por sí solo no es un factor suficiente para explicar el número de carreras impulsadas.
+
+# 3.- Modelado
+
+## Instalación de librerías
+
+Para la construcción del modelo de regresión lineal se utilizó la librería **scikit-learn**, una de las herramientas más utilizadas en el ámbito de la ciencia de datos y el aprendizaje automático en Python.
+
+[Scikit-learn](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html)
+
+El uso de esta librería nos permitió implementar el modelo de manera eficiente mediante funciones optimizadas como:
+
+- `LinearRegression()` para la creación del modelo
+- `fit()` para el entrenamiento
+- `predict()` para la generación de predicciones
+
+Optamos por utilizar esta herramienta en lugar de implementar la regresión de forma manual, ya que:
+
+- Reduce la complejidad del código
+- Minimiza errores en los cálculos matemáticos
+- Permite enfocarse en el análisis e interpretación de resultados
+- Es una práctica normal en entornos profesionales
+
+```bash
+pip install scikit-learn
+```
+
+Una vez instalada la librería, se importaron los módulos necesarios para el modelado:
+
+```python
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+```
+
+Y para evaluar correctamente el desempeño del modelo, el dataset fue dividido en dos subconjuntos:
+
+- Conjunto de entrenamiento **(80%)**
+- Conjunto de prueba **(20%)**
+
+# 4.- Evaluación del modelo
+
+## Evaluación del modelo
+
+Una vez entrenado el modelo, se procedió a evaluar su desempeño utilizando diferentes métricas, con la finalidad de medir qué tan precisas son las predicciones generadas.
+
+Para este análisis utilizamos las siguientes métricas:
+
+- **Error Cuadrático Medio (MSE)**
+- **Error Absoluto Medio (MAE)**
+- **Coeficiente de determinación (R²)**
+
+---
+
+## Cálculo de métricas
+
+```python
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+mse = mean_squared_error(y_test, y_pred)
+mae = mean_absolute_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print("MSE:", mse)
+print("MAE:", mae)
+print("R2:", r2)
+```
+
+# Parte 5: Visualización de resultados
+
+## Visualización del modelo
+
+Con el objetivo de comprender mejor el comportamiento del modelo de regresión lineal y facilitar la interpretación de los resultados, se generaron diversas visualizaciones.
+
+Estas gráficas permiten analizar la relación entre las variables, evaluar el desempeño del modelo y detectar posibles patrones en los errores.
+
+---
+
+## Gráfica de regresión lineal
+
+Se generó una gráfica de dispersión para representar la relación entre las variables `Hits` y `RBI`, junto a la recta de regresión obtenida por el modelo.
 
 ```python
 import matplotlib.pyplot as plt
+
+plt.scatter(X, y)
+plt.plot(X, modelo.predict(X), color='red')
+plt.xlabel("Hits")
+plt.ylabel("RBI")
+plt.title("Hits vs RBI")
+plt.show()
+```
+
+![imagen](ss2/1.png)
+```
+
+# 6.- Comparación e interpretación de resultados
+
+## Comparación de resultados
+
+Con el objetivo de evaluar el desempeño del modelo de regresión lineal, se realizó una comparación directa entre los valores reales y los valores predichos.
+
+```python
+resultados = pd.DataFrame({
+    'Real': y_test.values,
+    'Predicho': y_pred
+})
+
+print(resultados.head(10))
+```
+
+A partir de los resultados observados, se identificó que existen diferencias considerables entre los valores reales y los valores predichos, lo que quiere decir que el modelo presenta limitaciones en su capacidad de ajuste.
+
+
+## Interpretación de resultados
+
+En primer lugar, el coeficiente de correlación de Pearson mostró una relación positiva débil entre las variables Hits y RBI. Esto indica que, aunque existe cierta asociación, no es lo suficientemente fuerte como para generar predicciones precisas.
+
+En segundo lugar, las métricas de evaluación del modelo confirmaron estas observaciones:
+
+- El Error Cuadrático Medio (MSE) reflejó la presencia de errores significativos en las predicciones
+- El Error Absoluto Medio (MAE) indicó desviaciones importantes entre los valores reales y predichos
+- El Coeficiente de determinación (R²) presentó un valor negativo
+
+# Conclusión
+
+Durante esta actividad se aplicaron las principales etapas del proceso de ciencia de datos, desde la obtención y preparación de los datos hasta la construcción, evaluación e interpretación de un modelo de regresión lineal simple.
+
+En la fase inicial, se trabajó con datos reales de estadísticas de jugadores de béisbol, los cuales fueron limpiados y estructurados para garantizar su calidad y consistencia. Posteriormente, mediante el análisis exploratorio, se identificó que la relación entre el número de hits (`Hits`) y las carreras impulsadas (`RBI`) es positiva, pero débil.
+
+Con base a este análisis, se construyó un modelo de regresión lineal simple con el objetivo de predecir el valor de `RBI` a partir de `Hits`. Sin embargo, los resultados obtenidos evidenciaron que el modelo presenta limitaciones:
+
+- Las métricas de evaluación indicaron un bajo desempeño del modelo
+- El coeficiente de determinación (R²) negativo mostró que el modelo no logra explicar adecuadamente la variabilidad de los datos
+- Las visualizaciones confirmaron una baja precisión en las predicciones
+
+En general, estos resultados permiten concluir que la variable `Hits` por sí sola no es suficiente para predecir de manera precisa el número de carreras impulsadas. Esta actividad permitió aplicar de manera práctica los conceptos fundamentales de preparación de datos, análisis exploratorio, modelado y evaluación dentro del contexto de la ciencia de datos.
+
+# Ejercicios complementarios
+
+## Temas Cubiertos
+- **T9**: Preparación de los datos en Python
+- **T10**: Procesamiento de datos en Python
+
+## Prerrequisitos Recomendados
+- **Matemáticas**: Normalización, estandarización, operaciones básicas
+- **Estadística**: Valores atípicos, datos faltantes, distribuciones
+- **Programación**: Manipulación de DataFrames, funciones lambda
+
+### Ejercicio 1
+
+```python
 import numpy as np
 
-x = np.linspace(0, 10, 100)
-y = np.sin(x)
+datos = np.array([10, 20, 30, 40, 50])
 
-# Línea
-plt.plot(x, y)
-plt.title("Gráfico de línea")
-plt.show()
+norm = (datos - datos.min()) / (datos.max() - datos.min())
 
-# Scatter
-plt.scatter(x, y)
-plt.title("Scatter")
-plt.show()
-
-# Histograma
-plt.hist(y)
-plt.title("Histograma")
-plt.show()
-
-# Barras
-plt.bar([1,2,3], [3,7,5])
-plt.title("Barras")
-plt.show()\
+print(normalizados)
 ```
 
 ---
 
-## Ejercicio 9: EDA
+### Ejercicio 2
+
+
+o en python:
 
 ```python
-import seaborn as sns
+import numpy as np
 
-df = sns.load_dataset('iris')
+datos = np.array([2, 4, 4, 4, 5, 5, 7, 9])
 
-# Info
-print(df.info())
+media = datos.mean()
+std = datos.std()
 
-# Estadísticas
-print(df.describe())
+z_scores = (datos - media) / std
 
-# Histogramas
-df.hist()
-plt.show()
+print("Media:", media)
+print("Desviación estándar:", std)
+print("Z-scores:", z_scores)
+print("Media de z:", z_scores.mean())
+print("Std de z:", z_scores.std())
+```
 
-# Correlación
-corr = df.corr(numeric_only=True)
-sns.heatmap(corr, annot=True)
-plt.show()
+### Ejercicio 3:
 
-# Boxplot
-sns.boxplot(x='species', y='sepal_length', data=df)
-plt.show()
+```python
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
-# Outliers (IQR)
-Q1 = df['sepal_length'].quantile(0.25)
-Q3 = df['sepal_length'].quantile(0.75)
+datos = np.array([100, 200, 300, 400, 500]).reshape(-1, 1)
+
+minmax = MinMaxScaler()
+standard = StandardScaler()
+
+datos_minmax = minmax.fit_transform(datos)
+datos_standard = standard.fit_transform(datos)
+
+print("MinMaxScaler:")
+print(datos_minmax)
+
+print("StandardScaler:")
+print(datos_standard)
+```
+
+### Ejercicio 4:
+
+```python
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    'A': [1, 2, np.nan, 4, 5],
+    'B': [np.nan, 2, 3, 4, np.nan],
+    'C': [1, 2, 3, 4, 5]
+})
+
+print(df.isnull())
+
+print(df.isnull().sum())
+
+print((df.isnull().sum() / len(df)) * 100)
+
+print(df[df.isnull().any(axis=1)])
+```
+
+### Ejercicio 5:
+
+```python
+
+print(df.dropna())
+
+print(df.dropna(axis=1))
+
+print(df.fillna(df.mean(numeric_only=True)))
+
+print(df.fillna(df.median(numeric_only=True)))
+
+print(df.ffill())
+
+print(df.bfill())
+```
+
+### Ejercicio 6:
+
+```python
+from sklearn.impute import SimpleImputer
+
+# mean
+imp_mean = SimpleImputer(strategy='mean')
+print(imp_mean.fit_transform(df))
+
+# median
+imp_median = SimpleImputer(strategy='median')
+print(imp_median.fit_transform(df))
+
+# most_frequent
+imp_freq = SimpleImputer(strategy='most_frequent')
+print(imp_freq.fit_transform(df))
+
+# constant
+imp_const = SimpleImputer(strategy='constant', fill_value=0)
+print(imp_const.fit_transform(df))
+```
+
+### Ejercicio 7:
+
+```python
+import numpy as np
+
+datos = np.array([10, 12, 14, 15, 16, 18, 20, 22, 25, 100])
+
+Q1 = np.percentile(datos, 25)
+Q3 = np.percentile(datos, 75)
 IQR = Q3 - Q1
 
-outliers = df[(df['sepal_length'] < Q1 - 1.5*IQR) | (df['sepal_length'] > Q3 + 1.5*IQR)]
-print(outliers)
+lim_inf = Q1 - 1.5 * IQR
+lim_sup = Q3 + 1.5 * IQR
+
+ol = datos[(datos < lim_inf) | (datos > lim_sup)]
+
+print("Q1:", Q1)
+print("Q3:", Q3)
+print("IQR:", IQR)
+print("Límite inferior:", lim_inf)
+print("Límite superior:", lim_sup)
+print("Outliers:", ol)
 ```
 
----
-
-## Ejercicios de Estadística
-
-## Ejercicio 10: Medidas de Tendencia Central
+### Ejercicio 8:
 
 ```python
-# Media
-def media(lista):
-    return sum(lista) / len(lista)
+from scipy import stats
+import numpy as np
 
-# Mediana (no burbuja)
-def mediana(lista):
-    lista = sorted(lista)
-    n = len(lista)
-    mid = n // 2
-    if n % 2 == 0:
-        return (lista[mid-1] + lista[mid]) / 2
-    else:
-        return lista[mid]
+datos = np.array([10, 12, 14, 15, 16, 18, 20, 22, 25, 100])
 
-# Moda
-def moda(lista):
-    frecuencias = {}
-    for num in lista:
-        frecuencias[num] = frecuencias.get(num, 0) + 1
-    return max(frecuencias, key=frecuencias.get)
+z_scores = stats.zscore(datos)
+ol = np.where(np.abs(z_scores) > 3)
 
-datos = [5, 3, 8, 3, 7]
-
-print("Media:", media(datos))
-print("Mediana:", mediana(datos))
-print("Moda:", moda(datos))
+print("Z-scores:", z_scores)
+print("Índices outliers:", ol)
+print("Valores outliers:", datos[ol])
 ```
----
 
-## Ejercicio 11: Dispersión
+### Ejercicio 9:
+```python
+datos_no_outliers = datos[(datos >= lim_inf) & (datos <= lim_sup)]
+print(datos_no_outliers)
+
+datos_capping = np.clip(datos, lim_inf, lim_sup)
+print(datos_capping)
+
+datos_log = np.log(datos)
+print(datos_log)
+
+from scipy.stats import boxcox
+
+datos_boxcox, lamb = boxcox(datos)
+print(datos_boxcox)
+print("Lambda:", lamb)
+```
+
+### Ejercicio 10:
+```python
+# con sklearn
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+
+df = pd.DataFrame({
+    'color': ['rojo', 'azul', 'verde', 'rojo', 'verde'],
+    'talla': ['S', 'M', 'L', 'S', 'M']
+})
+
+le_color = LabelEncoder()
+le_talla = LabelEncoder()
+
+df['color_label'] = le_color.fit_transform(df['color'])
+df['talla_label'] = le_talla.fit_transform(df['talla'])
+
+print(df)
+
+print(pd.get_dummies(df[['color', 'talla']]))
+
+encoder = OneHotEncoder(sparse_output=False)
+encoded = encoder.fit_transform(df[['color', 'talla']])
+print(encoded)
+print(encoder.get_feature_names_out(['color', 'talla']))
+```
+
+### Ejercicio 11:
 
 ```python
-import math
+import numpy as np
+from scipy.stats import boxcox
+import pandas as pd
 
-# Rango
-def rango(lista):
-    return max(lista) - min(lista)
+datos = np.array([1, 2, 3, 4, 5, 10, 20, 30])
 
-# Varianza
-def varianza(lista):
-    m = sum(lista) / len(lista)
-    return sum((x - m)**2 for x in lista) / len(lista)
+print(np.log(datos))
 
-# Desviación
-def desviacion(lista):
-    return math.sqrt(varianza(lista))
+print(np.sqrt(datos))
 
-datos = [2,4,4,4,5,5,7,9]
+boxcox_data, lam = boxcox(datos)
+print(boxcox_data)
+print("Lambda:", lam)
 
-print("Rango:", rango(datos))
-print("Varianza:", varianza(datos))
-print("Desviación:", desviacion(datos))
+bins = pd.cut(datos, bins=3)
+print(bins)
 ```
-> Nota: Las capturas de pantalla para los ejercicios fueron omitidas para evitar relleno de evidencias en la documentación, sin embargo, la eficiencia de los códigos puede ser comprobada manualmente
 
-## Ejercicios de investigación
+### Ejercicio 12:
 
-## Ejercicio 12: El Proceso de Data Science
+```python
+import pandas as pd
+from sklearn.preprocessing import PolynomialFeatures
 
-### 1. ¿Qué es el ciclo CRISP-DM?
+df = pd.DataFrame({
+    'ventas': [100, 200, 300],
+    'costos': [60, 120, 180],
+    'fecha': pd.to_datetime(['2024-01-10', '2024-02-15', '2024-03-20'])
+})
 
-CRISP-DM (Cross Industry Standard Process for Data Mining) es una metodología estándar utilizada en proyectos de ciencia de datos y minería de datos. Proporciona un enfoque estructurado para resolver problemas mediante el análisis de datos, asegurando que el proceso sea ordenado, iterativo y orientado a objetivos.
+df['ratio_ventas_costos'] = df['ventas'] / df['costos']
 
-Se utiliza ampliamente en la industria porque permite organizar el trabajo desde la comprensión del problema hasta la implementación de soluciones basadas en datos.
+df['ganancia'] = df['ventas'] - df['costos']
 
-### 2. ¿Cuáles son las fases del proceso de ciencia de datos?
+df['alta_venta'] = (df['ventas'] > 150).astype(int)
 
-El proceso de ciencia de datos generalmente sigue estas fases:
+poly = PolynomialFeatures(degree=2, include_bias=False)
+poly_features = poly.fit_transform(df[['ventas', 'costos']])
 
-- Comprensión del negocio: Definir el problema y los objetivos.
-- Comprensión de los datos: Explorar y analizar los datos disponibles.
-- Preparación de los datos: Limpiar, transformar y organizar los datos.
-- Modelado: Aplicar algoritmos y modelos predictivos.
-- Evaluación: Verificar si el modelo cumple con los objetivos.
-- Despliegue: Implementar la solución en un entorno real.
+df['anio'] = df['fecha'].dt.year
+df['mes'] = df['fecha'].dt.month
+df['dia'] = df['fecha'].dt.day
 
-Estas fases no son lineales, ya que el proceso puede repetirse varias veces para mejorar los resultados.
+print(df)
+print(poly_features)
+```
 
-### 3. ¿Qué es el MVP (Minimum Viable Product) en ciencia de datos?
+### Ejercicio 13:
 
-El MVP (Producto Mínimo Viable) en ciencia de datos es una versión inicial de un modelo o solución que incluye solo las funcionalidades esenciales para resolver el problema principal.
+```python
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, RobustScaler, MaxAbsScaler
+import numpy as np
 
-Su objetivo es validar rápidamente si la solución funciona en la práctica, antes de invertir más tiempo y recursos en mejorarla. En lugar de buscar perfección desde el inicio, se prioriza obtener resultados útiles de forma rápida y luego iterar.
+data = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]])
 
----
+scalers = {
+    "MinMaxScaler": MinMaxScaler(),
+    "StandardScaler": StandardScaler(),
+    "RobustScaler": RobustScaler(),
+    "MaxAbsScaler": MaxAbsScaler()
+}
 
-## Ejercicio 13: Caso de Estudio
-Caso de estudio: Análisis de precios de Airbnb
-1. ¿Qué preguntas buscaban responder?
-- ¿Qué factores influyen en el precio de una propiedad?
-- ¿Cómo afecta la ubicación al costo?
-- ¿Existe relación entre el número de habitaciones y el precio?
-- ¿Qué tipo de propiedad es más costosa?
+for nombre, scaler in scalers.items():
+    print(f"\n{nombre}")
+    print(scaler.fit_transform(data))
+```
 
----
+### Ejercicio 14:
 
-2. ¿Qué técnicas usaron?
-- Análisis exploratorio de datos (EDA)
-- Estadísticas descriptivas (media, mediana, desviación estándar)
+```python
+import pandas as pd
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
 
-Visualizaciones:
-- Histogramas
-- Boxplots
-- Gráficas de dispersión
-- Mapas de calor (correlación)
-- Detección de valores atípicos (outliers)
+df = pd.DataFrame({
+    'edad': [20, 25, 30, None],
+    'ingreso': [1000, 1500, 2000, 2500],
+    'ciudad': ['A', 'B', 'A', 'C']
+})
 
----
+num_cols = ['edad', 'ingreso']
+cat_cols = ['ciudad']
 
-3. ¿Qué insights encontraron?
-- El precio tiende a aumentar con el número de habitaciones.
-- La ubicación es uno de los factores más importantes en el precio.
-- Existen outliers (propiedades muy caras) que afectan el promedio.
-- Algunas variables tienen mayor correlación con el precio que otras.
-- La distribución de precios no es uniforme, mostrando concentración en rangos específicos.
+num_pipeline = Pipeline([
+    ('imputer', SimpleImputer(strategy='mean')),
+    ('scaler', StandardScaler())
+])
+
+cat_pipeline = Pipeline([
+    ('imputer', SimpleImputer(strategy='most_frequent')),
+    ('onehot', OneHotEncoder())
+])
+
+preprocessor = ColumnTransformer([
+    ('num', num_pipeline, num_cols),
+    ('cat', cat_pipeline, cat_cols)
+])
+
+resultado = preprocessor.fit_transform(df)
+print(resultado)\
+```
+
+### Ejercicio 15:
