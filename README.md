@@ -502,7 +502,8 @@ Se concluye que:
 
 ---
 
-# Ejercicios complementarios
+
+# Ejercicios Complementarios - Semana 5 
 
 ## Temas Cubiertos
 
@@ -513,6 +514,350 @@ Se concluye que:
 
 ---
 
-## Ejercicios
+## Ejercicio 1: Covarianza Manualmente
+
+### Datos:
+- X = [1, 2, 3, 4, 5]
+- Y = [2, 4, 5, 4, 5]
+
+### Paso 1: Calcular medias
+```
+X̄ = (1+2+3+4+5)/5 = 15/5 = 3
+Ȳ = (2+4+5+4+5)/5 = 20/5 = 4
+```
+
+### Paso 2: Calcular covarianza
+
+| xi | yi | xi - X̄ | yi - ȳ | (xi-X̄)(yi-ȳ) |
+|----|----|--------|--------|--------------|
+| 1  | 2  | -2     | -2      | 4            |
+| 2  | 4  | -1     | 0       | 0            |
+| 3  | 5  | 0      | 1       | 0            |
+| 4  | 4  | 1      | 0       | 0            |
+| 5  | 5  | 2      | 1       | 2            |
+
+```
+Σ(xi-X̄)(yi-ȳ) = 4 + 0 + 0 + 0 + 2 = 6
+Cov(X,Y) = 6 / (5-1) = 6/4 = 1.5
+```
+
+>**Covarianza = 1.5**
+
+---
+
+## Ejercicio 2: Correlación de Pearson
+
+###  1.- Calcular desviaciones estándar
+
+Desviación estándar de X:
+```
+VAR(X) = Σ(xi-X̄)²/(n-1) = ((-2)²+(-1)²+0²+1²+2²)/4 = (4+1+0+1+4)/4 = 10/4 = 2.5
+σX = √2.5 = 1.58
+```
+
+Desviación estándar de Y:
+```
+VAR(Y) = Σ(yi-ȳ)²/(n-1) = ((-2)²+0²+1²+0²+1²)/4 = (4+0+1+0+1)/4 = 6/4 = 1.5
+σY = √1.5 = 1.22
+```
+
+### 2.- Calcular r
+```
+r = Cov(X,Y) / (σX * σY)
+r = 1.5 / (1.58 * 1.22)
+r = 1.5 / 1.93
+r ≈ 0.78
+```
+
+>- **r = 0.78 está entre 0 y 1**
+>- Significa que cuando X aumenta, Y también tiende a aumentar
+
+---
+
+## Ejercicio 3: Correlación en Python
+
+```python
+import pandas as pd
+import numpy as np
+from scipy import stats
+
+df = pd.DataFrame({
+    'horas_estudio': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    'calificacion': [35, 45, 50, 55, 65, 70, 75, 85, 90, 95]
+})
+
+print("Correlación:", df['horas_estudio'].corr(df['calificacion']))
+
+r, p_value = stats.pearsonr(df['horas_estudio'], df['calificacion'])
+print("p-value:", p_value)
+
+print("Covarianza:", df.cov())
+```
+
+
+> - Correlación ≈ 0.99 
+---
+
+## Ejercicio 4: Intervalo de Confianza
+
+### Datos:
+- n = 25
+- x̄ = 100
+- s = 15
+- Nivel de confianza = 95%
+
+### 1.- Buscar t para 95% y 24 grados de libertad
+- t ≈ 2.064 (valor de tabla t para 24 gl y 95%)
+
+### 2.- Calcular el intervalo
+```
+IC = x̄ ± t * (s / √n)
+IC = 100 ± 2.064 * (15 / √25)
+IC = 100 ± 2.064 * (15 / 5)
+IC = 100 ± 2.064 * 3
+IC = 100 ± 6.192
+IC = [93.81, 106.19]
+```
+
+**El intervalo de confianza es [93.81, 106.19]**
+
+> Estamos 95% seguros de que la verdadera media poblacional está entre 93.81 y 106.19
+
+---
+
+## Ejercicio 5: Cálculo de p-valor
+
+### Datos:
+- H0: μ = 50
+- Ha: μ ≠ 50
+- n = 30
+- x̄ = 55
+- s = 10
+
+### 1.- Calcular estadístico t
+```
+t = (x̄ - μ) / (s / √n)
+t = (55 - 50) / (10 / √30)
+t = 5 / (10 / 5.477)
+t = 5 / 1.826
+t ≈ 2.74
+```
+
+### 2.- Encontrar p-valor
+- gl = 30 - 1 = 29
+- Para t = 2.74 con 29 gl, el p-valor bilateral ≈ 0.01
+
+### 3.- Decisión
+- α = 0.05
+- p-valor = 0.01 < 0.05
+
+> RECHAZAR H0. Hay evidencia suficiente para decir que la media es diferente de 50.
+
+---
+
+## Ejercicio 6: Fórmula de Regresión Lineal
+
+### Datos:
+- X = [1, 2, 3, 4, 5]
+- Y = [2, 4, 5, 4, 5]
+
+### Ya calculado anteriormente:
+- X̄ = 3, Ȳ = 4
+- Cov(X,Y) = 1.5
+- VAR(X) = 2.5
+
+### Calcular β1:
+```
+β1 = Cov(X,Y) / Var(X)
+β1 = 1.5 / 2.5
+β1 = 0.6
+```
+
+### Calcular β0:
+```
+β0 = Ȳ - β1 * X̄
+β0 = 4 - 0.6 * 3
+β0 = 4 - 1.8
+β0 = 2.2
+```
+
+### Ecuación de regresión:
+```
+ŷ = 2.2 + 0.6 * x
+```
+
+### Predecir para X = 6:
+```
+ŷ = 2.2 + 0.6 * 6
+ŷ = 2.2 + 3.6
+ŷ = 5.8
+```
+
+> ŷ = 2.2 + 0.6x, para X=6 predecimos Y=5.8
+
+---
+
+## Ejercicio 7: Regresión Lineal en Python
+
+```python
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+X = np.array([[1], [2], [3], [4], [5], [6], [7], [8], [9], [10]])
+y = np.array([2, 4, 5, 4, 5, 6, 7, 8, 9, 11])
+
+modelo = LinearRegression()
+modelo.fit(X, y)
+
+print(f"Intercepto: {modelo.intercept_}")  
+print(f"Pendiente: {modelo.coef_[0]}")     
+
+prediccion = modelo.predict([[11]])
+print(f"Predicción para X=11: {prediccion}")  
+```
+> - Intercepto (β0) ≈ 1.4
+> - Pendiente (β1) ≈ 0.8
+> - Para X=11, Y ≈ 10.8
+
+---
+
+## Ejercicio 8: Coeficiente de Determinación (R²)
+
+```python
+from sklearn.metrics import r2_score
+
+y_real = [1, 2, 3, 4, 5]
+y_predicho = [1.1, 2.2, 2.9, 4.1, 4.9]
+
+SS_res = sum((y - pred)**2 for y, pred in zip(y_real, y_predicho))
+SS_tot = sum((y - sum(y_real)/len(y_real))**2 for y in y_real)
+
+r2 = 1 - (SS_res / SS_tot)
+print(f"R²: {r2}")
+
+print(f"R² sklearn: {r2_score(y_real, y_predicho)}")
+```
+
+> R² ≈ 0.99 (el modelo explica 99% de la variabilidad)
+
+
+---
+
+## Ejercicio 9: Error Estándar de la Estimación
+
+```python
+import numpy as np
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
+y_real = [10, 20, 30, 40, 50]
+y_predicho = [12, 18, 32, 38, 52]
+
+rmse = np.sqrt(mean_squared_error(y_real, y_predicho))
+mae = mean_absolute_error(y_real, y_predicho)
+
+print(f"RMSE: {rmse}")  # Error promedio 
+print(f"MAE: {mae}")   # Error absoluto medio
+```
+
+
+> - RMSE ≈ 2.0 (error promedio de 2 unidades)
+> - MAE ≈ 2.0 (error médio de 2 unidades)
+
+---
+
+## Ejercicio 10: Análisis de Residuos
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+X = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+y_real = np.array([2.1, 4.2, 5.8, 4.3, 5.5, 6.8, 7.5, 8.2, 9.1, 10.5])
+y_predicho = [2.3, 4.1, 5.9, 4.2, 5.6, 6.5, 7.4, 8.3, 9.0, 10.4]
+
+residuos = np.array(y_real) - np.array(y_predicho)
+
+print("Residuos:", residuos)
+print("Media de residuos:", np.mean(residuos))  
+```
+
+
+> - Los residuos son las diferencias entre valores reales y predichos
+> - Deben estar distribuidos aleatoriamente alrededor de 0
+> - No debe haber patrones claros
+
+---
+
+## Ejercicio 11: Supuestos de Regresión
+
+### 1. Linealidad
+- **Qué es:** La relación entre X y Y debe ser línea
+- **Cómo verificarla:** Scatter plot de Y vs X debe mostrar una línea o patrón
+
+### 2. Independencia
+- **Qué es:** Los residuos no deben estar correlacionados entre sí
+- **Qué es autocorrelación:** Cuando un residuo predice el siguiente
+- **Cómo detectarla:** Gráfico de residuos vs orden
+
+### 3. Homocedasticidad
+- **Qué es:** Los residuos tienen la misma varianza en todo X
+- **Qué es heterocedasticidad:** Varianza cambia con X
+- **Cómo detectarla:** Gráfico de residuos vs valores predichos
+
+### 4. Normalidad
+- **Qué es:** Los residuos deben seguir una distribución normal
+- **Qué es Q-Q plot:** Gráfico que compara residuos con distribución normal teórica
+- **Cómo interpretarla:** Si los puntos siguen la línea, los residuos son normales
+
+---
+
+## Ejercicio 12: Prueba t para Correlación
+
+```python
+from scipy import stats
+
+x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+y = [2, 4, 5, 4, 5, 6, 7, 8, 9, 11]
+
+r, p_value = stats.pearsonr(x, y)
+
+print(f"r: {r}")
+print(f"p-value: {p_value}")
+
+if p_value < 0.05:
+    print("Rechazar H0: La correlación es significativa")
+else:
+    print("No rechazar H0: La correlación no es significativa")
+```
+
+> - r ≈ 0.96
+> - 7.451501383552617e-06
+>-    RECHAZAR H0, la correlación es significativa
+
+---
+
+## Ejercicios 13 y 14: Investigación
+
+### Ejercicio 13: Aplicaciones de Regresión Lineal
+
+1. **Regresión a la media:** Es un fenómeno estadístico donde valores extremos tienden a acercarse a la media en mediciones sucesivas
+
+2. **Ejemplos de uso en negocios:**
+   - Predecir ventas futuras basadas en gasto publicitario
+   - Estimar precios de casas según tamaño
+   - Predecir demanda de productos
+
+3. **Diferencia entre correlación y causalidad:**
+   - Correlación: Dos variables varían juntas
+   - Causalidad: Una variable causa cambios en la otra
+   - Correlación no implica causalidad
+
+### Ejercicio 14: Limitaciones
+
+1. **Relaciones no lineales:** La regresión lineal simple solo captura relaciones líneas, no curvas
+
+2. **Extrapolación:** Predecir fuera del rango de datos es riesgoso porque supuesto de linealidad puede no cumplir
+
+3. **Variable omitida:** Cuando una variable importante no está en el modelo, puede causar estimaciones incorrectas 
 
 ---
