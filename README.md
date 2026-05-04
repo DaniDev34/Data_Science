@@ -595,7 +595,7 @@ print("Covarianza:", df.cov())
 ```
 
 
-> - Correlación ≈ 0.99 
+> - Correlación ≈ 0.99 ddd   
 ---
 
 ## Ejercicio 4: Intervalo de Confianza
